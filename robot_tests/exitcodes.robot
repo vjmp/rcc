@@ -10,12 +10,9 @@ General output for rcc command       0    build/rcc --controller citests
 
 Help for rcc command                 0    build/rcc -h
 
-Help for rcc assistant subcommand    0    build/rcc assistant -h --controller citests
-Help for rcc cloud subcommand        0    build/rcc cloud -h --controller citests
 Help for rcc community subcommand    0    build/rcc community -h --controller citests
 Help for rcc configure subcommand    0    build/rcc configure -h --controller citests
 Help for rcc create subcommand       0    build/rcc create -h --controller citests
-Help for rcc feedback subcommand     0    build/rcc feedback -h --controller citests
 Help for rcc holotree subcommand     0    build/rcc holotree -h --controller citests
 Help for rcc help subcommand         0    build/rcc help -h --controller citests
 Help for rcc interactive subcommand  0    build/rcc interactive -h --controller citests

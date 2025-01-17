@@ -1,5 +1,17 @@
 # rcc change log
 
+## v25.1.17 (date: 17.1.2025) PRIVATE
+
+- personal, unmaintained fork started (do not use)
+- removed metrics tracking
+- removed subprocess monitoring, since it had performance impact
+  which I don't want in my fork
+- removed assistant functionality (which depends on Robocorp Cloud)
+- removed cloud commands (no personal use for them)
+- removed robot cache functionality
+- robot test cleanup (for new reality)
+- version numbers are now kind of date based
+
 ## v18.1.2 (date: 28.6.2024)
 
 - updated default settings.yaml for Sema4.ai products.

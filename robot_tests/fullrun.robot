@@ -12,7 +12,7 @@ Fullrun setup
 
 Goal: Show rcc version information.
   Step        build/rcc version --controller citests
-  Must Have   v18.
+  Must Have   v25.
 
 Goal: There is debug message when bundled case.
   Step        build/rcc version --controller citests --debug --bundled
@@ -31,20 +31,6 @@ Goal: Show rcc license information.
   Must Have   http://www.apache.org/licenses/LICENSE-2.0
   Must Have   Copyright 2020 Robocorp Technologies, Inc.
   Wont Have   EULA
-
-Goal: Telemetry tracking enabled by default.
-  Step        build/rcc configure identity --controller citests
-  Must Have   anonymous health tracking is: enabled
-  Must Exist  %{ROBOCORP_HOME}/rcc.yaml
-
-Goal: Send telemetry data to cloud.
-  Step        build/rcc feedback metric --controller citests -t test -n rcc.test -v robot.fullrun
-  Use STDERR
-  Must Have   OK
-
-Goal: Telemetry tracking can be disabled.
-  Step        build/rcc configure identity --controller citests --do-not-track
-  Must Have   anonymous health tracking is: disabled
 
 Goal: Show listing of rcc commands.
   Step        build/rcc --controller citests
@@ -257,13 +243,3 @@ Goal: See variables from specific environment with robot.yaml knowledge in JSON 
 Goal: See diagnostics as valid JSON form
   Step        build/rcc configure diagnostics --json
   Must Be Json Response
-
-Goal: Simulate issue report sending with dryrun
-  Step        build/rcc feedback issue --controller citests --dryrun --report robot_tests/report.json --attachments robot_tests/conda.yaml
-  Must Have   "report":
-  Must Have   "zipfile":
-  Must Have   "installationId":
-  Must Have   "platform":
-  Must Be Json Response
-  Use STDERR
-  Must Have   OK

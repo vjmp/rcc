@@ -99,16 +99,9 @@ func EditRobotClaims(seconds int, workspace string) *Claims {
 	return result
 }
 
-func RunAssistantClaims(seconds int, workspace string) *Claims {
-	result := NewClaims("RunAssistant", fmt.Sprintf(WorkspaceApi, workspace), seconds)
-	result.CapabilitySet = "run/assistant"
-	return result
-}
-
 func RunRobotClaims(seconds int, workspace string) *Claims {
 	result := NewClaims("RunRobot", fmt.Sprintf(WorkspaceApi, workspace), seconds)
 	result.CapabilitySet = "run/robot"
-	cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.capabilityset.runrobot", common.Version)
 	return result
 }
 
@@ -134,10 +127,6 @@ func VerificationClaims() *Claims {
 
 func BearerToken(token string) string {
 	return fmt.Sprintf("Bearer %s", token)
-}
-
-func WorkspaceToken(token string) string {
-	return fmt.Sprintf("RC_WST %s", token)
 }
 
 func ProductCloudHmac(identifier, token string) string {

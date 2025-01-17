@@ -1,11 +1,9 @@
 package common
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 	"time"
 )
 
@@ -41,14 +39,6 @@ func fromEnvironment(form string) string {
 		return replacement
 	}
 	return form
-}
-
-func GenerateKillCommand(keys []int) string {
-	command := []string{"taskkill /f"}
-	for _, key := range keys {
-		command = append(command, fmt.Sprintf("/pid %d", key))
-	}
-	return strings.Join(command, " ")
 }
 
 func PlatformSyncDelay() {

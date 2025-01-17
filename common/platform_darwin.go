@@ -1,10 +1,8 @@
 package common
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
@@ -23,14 +21,6 @@ func ExpandPath(entry string) string {
 		return intermediate
 	}
 	return result
-}
-
-func GenerateKillCommand(keys []int) string {
-	command := []string{"kill -9"}
-	for _, key := range keys {
-		command = append(command, fmt.Sprintf("%d", key))
-	}
-	return strings.Join(command, " ")
 }
 
 func PlatformSyncDelay() {

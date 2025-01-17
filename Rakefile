@@ -21,7 +21,6 @@ task :tooling do
 end
 
 task :noassets do
-  rm_f FileList['blobs/assets/micromamba.*']
   rm_f FileList['blobs/assets/*.zip']
   rm_f FileList['blobs/assets/*.yaml']
   rm_f FileList['blobs/assets/*.py']
@@ -33,7 +32,10 @@ def download_link(version, platform, filename)
     "https://downloads.robocorp.com/micromamba/#{version}/#{platform}/#{filename}"
 end
 
+desc 'Download micromamba (manual step)'
 task :micromamba do
+    rm_f FileList['blobs/assets/micromamba.*']
+
     version = File.read('assets/micromamba_version.txt').strip()
     puts "Using micromamba version #{version}"
     url = download_link(version, "macos64", "micromamba")
@@ -45,7 +47,7 @@ task :micromamba do
     sh "gzip -f -9 blobs/assets/micromamba.*"
 end
 
-task :assets => [:noassets, :micromamba] do
+task :assets => [:noassets] do
   FileList['templates/*/'].each do |directory|
     basename = File.basename(directory)
     assetname = File.absolute_path(File.join("blobs", "assets", "#{basename}.zip"))
@@ -71,7 +73,8 @@ end
 desc 'Run tests.'
 task :test => [:support, :assets] do
   sh 'go test -cover -coverprofile=tmp/cover.out ./...'
-  sh 'go tool cover -func=tmp/cover.out'
+  # sh 'go tool cover -func=tmp/cover.out'
+  puts "OK"
 end
 
 task :linux64 => [:what, :test] do
@@ -104,6 +107,7 @@ end
 desc 'Build local, operating system specific rcc'
 task :local => [:tooling, :support, :assets] do
   sh "go build -o build/ ./cmd/..."
+  puts "OK"
 end
 
 desc 'Run robot tests on local application'

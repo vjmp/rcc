@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/robocorp/rcc/anywork"
-	"github.com/robocorp/rcc/cloud"
 	"github.com/robocorp/rcc/cmd"
 	"github.com/robocorp/rcc/common"
 	"github.com/robocorp/rcc/conda"
@@ -53,22 +52,6 @@ func EnsureUserRegistered() (string, error) {
 	return warning, cache.Save()
 }
 
-func TimezoneMetric() error {
-	cache, err := operations.SummonCache()
-	if err != nil {
-		return err
-	}
-	deadline, ok := cache.Stamps[timezonekey]
-	if ok && deadline > common.When {
-		return nil
-	}
-	cache.Stamps[timezonekey] = common.When + daily
-	zone := time.Now().Format("MST-0700")
-	cloud.InternalBackgroundMetric(common.ControllerIdentity(), timezonekey, zone)
-	cloud.InternalBackgroundMetric(common.ControllerIdentity(), oskey, common.Platform())
-	return cache.Save()
-}
-
 func ExitProtection() {
 	runtime.Gosched()
 	status := recover()
@@ -78,16 +61,12 @@ func ExitProtection() {
 		if ok {
 			exit.ShowMessage()
 			pretty.Highlight("[rcc] exit status will be: %d!", exit.Code)
-			cloud.WaitTelemetry()
 			common.WaitLogs()
 			os.Exit(exit.Code)
 		}
-		cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.panic.origin", cmd.Origin())
-		cloud.WaitTelemetry()
 		common.WaitLogs()
 		panic(status)
 	}
-	cloud.WaitTelemetry()
 	common.WaitLogs()
 }
 
@@ -159,9 +138,6 @@ func main() {
 	defer os.Stdout.Sync()
 	cmd.Execute()
 	common.Timeline("Command execution done.")
-	if common.OneOutOf(5) {
-		TimezoneMetric()
-	}
 
 	if common.WarrantyVoided() {
 		common.Timeline("Running in 'warranty voided' mode.")

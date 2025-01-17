@@ -11,7 +11,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/robocorp/rcc/cloud"
 	"github.com/robocorp/rcc/common"
 	"github.com/robocorp/rcc/fail"
 	"github.com/robocorp/rcc/journal"
@@ -323,7 +322,6 @@ func (it *hololib) queryBlueprint(key string) bool {
 	err = shadow.Treetop(CatalogCheck(it, shadow))
 	common.TimelineEnd()
 	if err != nil {
-		cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.holotree.catalog.failure", common.Version)
 		common.Debug("Catalog check failed, reason: %v", err)
 		return false
 	}

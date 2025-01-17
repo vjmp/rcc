@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/robocorp/rcc/cloud"
 	"github.com/robocorp/rcc/common"
 	"github.com/robocorp/rcc/conda"
 	"github.com/robocorp/rcc/journal"
@@ -30,7 +29,6 @@ in your own machine.`,
 			defer common.Stopwatch("Task run lasted").Report()
 		}
 		simple, config, todo, label := operations.LoadTaskWithEnvironment(robotFile, runTask, forceFlag)
-		cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.cli.run", common.Version)
 		commandline := todo.Commandline()
 		commandline = append(commandline, args...)
 		operations.SelectExecutionModel(captureRunFlags(false), simple, commandline, config, todo, label, interactiveFlag, nil)

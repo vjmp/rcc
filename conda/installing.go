@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/robocorp/rcc/blobs"
-	"github.com/robocorp/rcc/cloud"
 	"github.com/robocorp/rcc/common"
 	"github.com/robocorp/rcc/fail"
 	"github.com/robocorp/rcc/pathlib"
@@ -62,7 +61,6 @@ func DoExtract(delay time.Duration) bool {
 		common.Fatal("Could not make micromamba executalbe, reason:", err)
 		return false
 	}
-	cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.micromamba.extract", common.Version)
 	common.PlatformSyncDelay()
 	return true
 }

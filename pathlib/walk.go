@@ -31,10 +31,6 @@ func IgnoreNothing(_ os.FileInfo) bool {
 	return false
 }
 
-func IgnoreDirectories(target os.FileInfo) bool {
-	return target.IsDir()
-}
-
 func ForceNothing(_ os.FileInfo) bool {
 	return false
 }

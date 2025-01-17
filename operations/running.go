@@ -2,13 +2,11 @@ package operations
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 
-	"github.com/robocorp/rcc/cloud"
 	"github.com/robocorp/rcc/common"
 	"github.com/robocorp/rcc/conda"
 	"github.com/robocorp/rcc/htfs"
@@ -63,11 +61,6 @@ func (it *TokenPeriod) EnforceGracePeriod() *TokenPeriod {
 
 func asSeconds(minutes int) int {
 	return 60 * minutes
-}
-
-func DefaultTokenPeriod() *TokenPeriod {
-	result := &TokenPeriod{}
-	return result.EnforceGracePeriod()
 }
 
 func (it *TokenPeriod) AsSeconds() (int, int, bool) {
@@ -362,25 +355,14 @@ func ExecuteTask(flags *RunFlags, template []string, config robot.Robot, todo ro
 
 	common.Debug("about to run command - %v", task)
 	journal.CurrentBuildEvent().RobotStarts()
-	pipe := WatchChildren(os.Getpid(), 550*time.Millisecond)
 	shell.WithInterrupt(func() {
-		exitcode := 0
 		if common.NoOutputCapture {
-			exitcode, err = shell.New(environment, directory, task...).Execute(interactive)
+			_, err = shell.New(environment, directory, task...).Execute(interactive)
 		} else {
-			exitcode, err = shell.New(environment, directory, task...).Tee(outputDir, interactive)
-		}
-		if exitcode != 0 {
-			details := fmt.Sprintf("%s_%d_%08x", common.Platform(), exitcode, uint32(exitcode))
-			cloud.InternalBackgroundMetric(common.ControllerIdentity(), "rcc.cli.run.failure", details)
+			_, err = shell.New(environment, directory, task...).Tee(outputDir, interactive)
 		}
 	})
 	pretty.RccPointOfView(actualRun, err)
-	seen, ok := <-pipe
-	suberr := SubprocessWarning(seen, ok)
-	if suberr != nil {
-		pretty.Warning("Problem with subprocess warnings, reason: %v", suberr)
-	}
 	journal.CurrentBuildEvent().RobotEnds()
 	after := make(map[string]string)
 	afterHash, afterErr := conda.DigestFor(label, after)
